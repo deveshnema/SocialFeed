@@ -12,6 +12,7 @@
 		954A240120B2645C005262E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 954A240020B2645C005262E0 /* Assets.xcassets */; };
 		954A240420B2645C005262E0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 954A240220B2645C005262E0 /* LaunchScreen.storyboard */; };
 		95A84F0520B3C03800657CB3 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A84F0420B3C03800657CB3 /* Model.swift */; };
+		95A84F0720B3E60200657CB3 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A84F0620B3E60200657CB3 /* MainTabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		954A240320B2645C005262E0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		954A240520B2645C005262E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		95A84F0420B3C03800657CB3 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		95A84F0620B3E60200657CB3 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,13 +57,30 @@
 			isa = PBXGroup;
 			children = (
 				954A23F920B26459005262E0 /* AppDelegate.swift */,
-				954A23FB20B26459005262E0 /* FeedViewController.swift */,
-				95A84F0420B3C03800657CB3 /* Model.swift */,
+				95A84F0920B3E62300657CB3 /* Controllers */,
+				95A84F0820B3E60C00657CB3 /* Model */,
 				954A240020B2645C005262E0 /* Assets.xcassets */,
 				954A240220B2645C005262E0 /* LaunchScreen.storyboard */,
 				954A240520B2645C005262E0 /* Info.plist */,
 			);
 			path = SocialFeed;
+			sourceTree = "<group>";
+		};
+		95A84F0820B3E60C00657CB3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				95A84F0420B3C03800657CB3 /* Model.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		95A84F0920B3E62300657CB3 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				954A23FB20B26459005262E0 /* FeedViewController.swift */,
+				95A84F0620B3E60200657CB3 /* MainTabBarController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,6 +155,7 @@
 			files = (
 				95A84F0520B3C03800657CB3 /* Model.swift in Sources */,
 				954A23FC20B26459005262E0 /* FeedViewController.swift in Sources */,
+				95A84F0720B3E60200657CB3 /* MainTabBarController.swift in Sources */,
 				954A23FA20B26459005262E0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

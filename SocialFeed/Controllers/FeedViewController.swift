@@ -17,7 +17,7 @@ class FeedViewController: UICollectionViewController, UICollectionViewDelegateFl
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Social Feed"
-        collectionView?.backgroundColor = UIColor.lightGray
+        collectionView?.backgroundColor = UIColor(white: 0.95, alpha: 1)
         collectionView?.alwaysBounceVertical = true
         collectionView?.register(FeedCell.self, forCellWithReuseIdentifier: cellid)
         setupData()
@@ -196,7 +196,7 @@ class FeedCell : UICollectionViewCell {
     }()
     
     func setupViews() {
-        backgroundColor = UIColor.yellow
+        backgroundColor = UIColor.white
         addSubview(nameLabel)
         addSubview(profileImageView)
         addSubview(statusTextView)

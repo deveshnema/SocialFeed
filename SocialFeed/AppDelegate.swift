@@ -19,9 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
-        let controller = FeedViewController(collectionViewLayout: UICollectionViewFlowLayout())
-        let navController = UINavigationController(rootViewController: controller)
-        window?.rootViewController = navController
+        window?.rootViewController = MainTabBarController()
         
         UINavigationBar.appearance().barTintColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey(rawValue: NSAttributedStringKey.foregroundColor.rawValue): UIColor.white]
