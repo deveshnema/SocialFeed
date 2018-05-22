@@ -26,8 +26,8 @@ class FeedViewController: UICollectionViewController, UICollectionViewDelegateFl
     func setupData() {
         let batmanPost = Post(name: "Batman", imageName: "batman", statusText: "It's not who I am underneath, but what I do that defines me.", date: "May 20", location: "Gotham City", statusImageName: "batman_status", likes: "14.8K", comments: "263K")
          let ironmanPost = Post(name: "Iron Man", imageName: "ironman", statusText: "I know that it's confusing. It is one thing to question the official story, and another thing entirely to make wild accusations, or insinuate that I'm a superhero. \n\nMy armor was never a distraction or a hobby, it was a cocoon, and now I'm a changed man. You can take away my house, all my tricks and toys, but one thing you can't take away - I am Iron Man. \n\nAgent’s ready. Save the world. Yadda, yadda. We need to go help Black Widow.", date: "Apr 6", location: "New  City", statusImageName: "ironman_status", likes: "12.1K", comments: "419K")
-
-        posts = [batmanPost, ironmanPost]
+        let supermanPost = Post(name: "Superman", imageName: "superman", statusText: "Hi, this is Superman", date: "Feb 3", location: "Old City", statusImageName: "superman_status", likes: "50.2K", comments: "663K")
+        posts = [batmanPost, ironmanPost, supermanPost]
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -37,6 +37,7 @@ class FeedViewController: UICollectionViewController, UICollectionViewDelegateFl
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellid, for: indexPath) as! FeedCell
         cell.post = posts[indexPath.item]
+        cell.feedVC = self
         return cell
     }
     
@@ -49,10 +50,66 @@ class FeedViewController: UICollectionViewController, UICollectionViewDelegateFl
         }
         return CGSize(width: view.frame.width, height: 500)
     }
+    
+    let blackBackgroundView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.black
+        return view
+    }()
+    
+    let zoomImageView : UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.isUserInteractionEnabled = true
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    var statusImageView : UIImageView?
+    
+    
+    func zoomInStatusImageView(statusImageView : UIImageView) {
+        self.statusImageView = statusImageView
+        if let startingFrame = statusImageView.superview?.convert(statusImageView.frame, to: nil) {
+            statusImageView.alpha = 0
+            
+            blackBackgroundView.frame = view.frame
+            blackBackgroundView.alpha = 0
+            view.addSubview(blackBackgroundView)
+            
+            zoomImageView.image = statusImageView.image
+            zoomImageView.frame = startingFrame
+            view.addSubview(zoomImageView)
+            
+            zoomImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(zoomOutStatusImageView)))
+            
+            UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                let height = (self.view.frame.width / startingFrame.width) * startingFrame.height
+                let y = self.view.frame.height/2 - height/2
+                self.zoomImageView.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: height)
+                self.blackBackgroundView.alpha = 1
+            }, completion: nil)
+        }
+    }
+    
+    @objc func zoomOutStatusImageView() {
+        if let startingFrame = statusImageView!.superview?.convert(statusImageView!.frame, to: nil) {
+            UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.curveEaseOut, animations: {
+                self.zoomImageView.frame = startingFrame
+                self.blackBackgroundView.alpha = 0
+            }, completion: { (didComplete) -> Void in
+                self.zoomImageView.removeFromSuperview()
+                self.blackBackgroundView.removeFromSuperview()
+                self.statusImageView?.alpha = 1
+            })
+        }
+    }
 }
 
 //MARK:- FeedCell
 class FeedCell : UICollectionViewCell {
+    var feedVC : FeedViewController?
+    
     var post : Post? {
         didSet {
             let attributedText = NSMutableAttributedString(string: "")
@@ -135,6 +192,7 @@ class FeedCell : UICollectionViewCell {
         imageView.image = UIImage(named: "batman_status")
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
+        imageView.isUserInteractionEnabled = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -195,6 +253,10 @@ class FeedCell : UICollectionViewCell {
         return button
     }()
     
+    @objc func zoomInStatusImageView() {
+        feedVC?.zoomInStatusImageView(statusImageView: statusImageView)
+    }
+    
     func setupViews() {
         backgroundColor = UIColor.white
         addSubview(nameLabel)
@@ -210,6 +272,8 @@ class FeedCell : UICollectionViewCell {
         buttonsView.addArrangedSubview(shareButton)
         
 
+        statusImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(zoomInStatusImageView)))
+        
         //Constraints for profileImageView
         profileImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8).isActive = true
         profileImageView.trailingAnchor.constraint(equalTo: nameLabel.leadingAnchor, constant: -8).isActive = true
