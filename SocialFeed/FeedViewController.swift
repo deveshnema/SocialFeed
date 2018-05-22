@@ -12,29 +12,88 @@ let cellid = "cellid"
 
 class FeedViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
+    var posts = [Post]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Social Feed"
         collectionView?.backgroundColor = UIColor.lightGray
         collectionView?.alwaysBounceVertical = true
         collectionView?.register(FeedCell.self, forCellWithReuseIdentifier: cellid)
+        setupData()
+    }
+    
+    func setupData() {
+        let batmanPost = Post(name: "Batman", imageName: "batman", statusText: "It's not who I am underneath, but what I do that defines me.", date: "May 20", location: "Gotham City", statusImageName: "batman_status", likes: "14.8K", comments: "263K")
+         let ironmanPost = Post(name: "Iron Man", imageName: "ironman", statusText: "I know that it's confusing. It is one thing to question the official story, and another thing entirely to make wild accusations, or insinuate that I'm a superhero. \n\nMy armor was never a distraction or a hobby, it was a cocoon, and now I'm a changed man. You can take away my house, all my tricks and toys, but one thing you can't take away - I am Iron Man. \n\nAgent’s ready. Save the world. Yadda, yadda. We need to go help Black Widow.", date: "Apr 6", location: "New  City", statusImageName: "ironman_status", likes: "12.1K", comments: "419K")
+
+        posts = [batmanPost, ironmanPost]
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return posts.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: cellid, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellid, for: indexPath) as! FeedCell
+        cell.post = posts[indexPath.item]
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 400)
+        if let statusText = posts[indexPath.item].statusText {
+            let rect = NSString(string: statusText).boundingRect(with: CGSize(width: view.frame.width, height: 1000), options: NSStringDrawingOptions.usesFontLeading.union(NSStringDrawingOptions.usesLineFragmentOrigin), attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 14)], context: nil)
+            let otherCellsHeightsAndSpacings : CGFloat = 8 + 44 + 12 + 4 + 200 + 4 + 8 + 20 + 8 + 30 + 8 + 8
+            let padding : CGFloat = 16
+            return CGSize(width: view.frame.width, height: rect.height + otherCellsHeightsAndSpacings + padding)
+        }
+        return CGSize(width: view.frame.width, height: 500)
     }
 }
 
 //MARK:- FeedCell
 class FeedCell : UICollectionViewCell {
+    var post : Post? {
+        didSet {
+            let attributedText = NSMutableAttributedString(string: "")
+            if let name = post?.name, let date = post?.date, let location = post?.location {
+                attributedText.append(NSMutableAttributedString(string: name, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 14)]))
+                //Location label
+                attributedText.append(NSAttributedString(string: "\n\(date). \(location). ", attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12), NSAttributedStringKey.foregroundColor : UIColor.lightGray]))
+                
+                //Shared-with icon
+                let attachment = NSTextAttachment()
+                attachment.image = UIImage(named: "globe")
+                attachment.bounds = CGRect(x: 0, y: 0, width: 12, height: 12)
+                attributedText.append(NSAttributedString(attachment: attachment))
+                
+                //Paragraph Style
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 4
+                
+                attributedText.addAttributes([NSAttributedStringKey.paragraphStyle : paragraphStyle], range: NSRange(location: 0, length: attributedText.string.count))
+                
+                nameLabel.attributedText = attributedText
+            }
+            
+            if let imageName = post?.imageName {
+                profileImageView.image = UIImage(named: imageName)
+            }
+            
+            if let likes = post?.likes, let comments = post?.comments {
+                likeCommentLabel.text = "\(likes) Likes   \(comments) Comments"
+            }
+            
+            if let statusText = post?.statusText {
+                statusTextView.text =  statusText
+            }
+            
+            if let statusImageName = post?.statusImageName {
+                statusImageView.image = UIImage(named: statusImageName)
+            }
+            
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,26 +107,6 @@ class FeedCell : UICollectionViewCell {
     let nameLabel : UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
-        //Name
-        let attributedText = NSMutableAttributedString(string: "Batman", attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 14)])
-        
-        //Location label
-        attributedText.append(NSAttributedString(string: "\nMay 20. Gotham City. ", attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 12), NSAttributedStringKey.foregroundColor : UIColor.lightGray]))
-        
-        //Shared-with icon
-        let attachment = NSTextAttachment()
-        attachment.image = UIImage(named: "globe")
-        attachment.bounds = CGRect(x: 0, y: 0, width: 12, height: 12)
-        attributedText.append(NSAttributedString(attachment: attachment))
-        
-        //Paragraph Style
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 4
-        
-        attributedText.addAttributes([NSAttributedStringKey.paragraphStyle : paragraphStyle], range: NSRange(location: 0, length: attributedText.string.count))
-        
-        label.attributedText = attributedText
-        
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -185,11 +224,11 @@ class FeedCell : UICollectionViewCell {
         statusTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8).isActive = true
         statusTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8).isActive = true
         statusTextView.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 4).isActive = true
-        statusTextView.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         //Constraints for statusImageView
         statusImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         statusImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        statusImageView.heightAnchor.constraint(equalToConstant: 200)
         statusImageView.topAnchor.constraint(equalTo: statusTextView.bottomAnchor, constant: 4).isActive = true
 
         //Constraints for likeCommentLabel
