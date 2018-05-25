@@ -17,6 +17,7 @@ An iOS 11 fb news feed style App
 - Firebase/Database
 
 ## Screenshots
-Social Feed View: ![feed1_iphonexspacegrey_portrait](https://user-images.githubusercontent.com/38988531/40530693-a1c244aa-5fae-11e8-96bd-38ef6fea9b2e.png)
-Social Feed View: ![feed2_iphonexspacegrey_portrait](https://user-images.githubusercontent.com/38988531/40530694-a1dfc1b0-5fae-11e8-8d44-8a50e6bcb0c3.png)
-Image Full Screen Mode: ![fullscreenmode_iphonexspacegrey_portrait](https://user-images.githubusercontent.com/38988531/40530696-a1f749de-5fae-11e8-909d-c9d72af6e2ef.png)
+Social Feed View: ![feed1_iphonexspacegrey_portrait](https://user-images.githubusercontent.com/38988531/40532385-25709b4e-5fb4-11e8-9c3f-796a6d1a62f2.png)
+Social Feed View: ![feed2_iphonexspacegrey_portrait](https://user-images.githubusercontent.com/38988531/40532386-258edc80-5fb4-11e8-91d0-2c615f1b927a.png)
+Social Feed View: ![feed3_iphonexspacegrey_portrait](https://user-images.githubusercontent.com/38988531/40532387-25a67c46-5fb4-11e8-8ea8-3014dc8b041a.png)
+Image Full Screen Mode: ![fullscreenmode_iphonexspacegrey_portrait](https://user-images.githubusercontent.com/38988531/40532389-25c213de-5fb4-11e8-8587-53a61a885fa5.png)
