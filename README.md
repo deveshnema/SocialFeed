@@ -1,5 +1,7 @@
 # SocialFeed
-An iOS 11 fb news feed style App
+An iOS (Swift 4) Facebook New Feed style App
+
+(Recreating the design style only to enhance the learning experience)
 
 ## Detail
 - The App has been styled in the fb news feed style
@@ -7,6 +9,8 @@ An iOS 11 fb news feed style App
 - Views of the social post include - 
   - User name, status message, location, number of likes and comments and a status image
   - Tap gesture on status image to show it in full screen mode
+- Extensive use of UICollectionView
+
 
 ## Technology
 - Swift 4
